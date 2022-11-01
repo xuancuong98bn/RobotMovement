@@ -16,7 +16,7 @@
 using namespace std;
 
 // Store name of command file
-static const string sCommandFile = "input2.txt";
+static const string sCommandFile = "input3.txt";
 
 /**
  * @brief The Controller class is responsible for getting commands and asking robot execute them

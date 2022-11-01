@@ -14,9 +14,9 @@ Controller::Controller()
 {
     vector<tuple<string,int, int>> raw_commands = Utility::GetCommand("..\\RobotMovement\\"+sCommandFile);
     if (!raw_commands.empty()){
-        size = get<1>(raw_commands[0]);
-        robot = new Robot(size);
         convertCmd(raw_commands);
+        robot = new Robot(size);
+
     }
 }
 
@@ -41,7 +41,10 @@ void Controller::convertCmd(vector<tuple<string, int, int>> raw_commands)
     for(auto cmd : raw_commands){
         string raw_cmd = get<0>(cmd);
         tuple<string,int, int> rcmd;
-        if (raw_cmd.compare("DIMENSION") == 0) commands.push_back(make_tuple(Robot::DIMENSION, get<1>(cmd), get<2>(cmd)));
+        if (raw_cmd.compare("DIMENSION") == 0) {
+            commands.push_back(make_tuple(Robot::DIMENSION, get<1>(cmd), get<2>(cmd)));
+            size = get<1>(cmd);
+        }
         if (raw_cmd.compare("MOVE_TO") == 0) commands.push_back(make_tuple(Robot::MOVE_TO, get<1>(cmd), get<2>(cmd)));
         if (raw_cmd.compare("LINE_TO") == 0) commands.push_back(make_tuple(Robot::LINE_TO, get<1>(cmd), get<2>(cmd)));
     }
