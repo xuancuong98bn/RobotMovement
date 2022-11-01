@@ -1,6 +1,15 @@
+/**
+    Cpp17 RobotMovement, controller.cpp
+    Purpose: Getting commands and asking robot execute them
+
+    @author CuongNX
+    @version 1.0 11/1/2022
+*/
+
 #include "controller.h"
 #include "utility.h"
 
+// Constructor
 Controller::Controller()
 {
     vector<tuple<string,int, int>> raw_commands = Utility::GetCommand("..\\RobotMovement\\"+sCommandFile);
@@ -11,6 +20,7 @@ Controller::Controller()
     }
 }
 
+// Start to control robot
 void Controller::start()
 {
     for(auto cmd : commands){
@@ -19,11 +29,13 @@ void Controller::start()
     if (robot != nullptr) printGrid(robot->RGrid());
 }
 
+// Destructor
 Controller::~Controller()
 {
     delete robot;
 }
 
+// Convert raw command with string to command by identify with enum
 void Controller::convertCmd(vector<tuple<string, int, int>> raw_commands)
 {
     for(auto cmd : raw_commands){
@@ -35,6 +47,7 @@ void Controller::convertCmd(vector<tuple<string, int, int>> raw_commands)
     }
 }
 
+// Print grid that describe route that robot passed
 void Controller::printGrid(vector<vector<bool>> RGrid)
 {
     for(int i = 0; i < size; i++){

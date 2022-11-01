@@ -1,3 +1,11 @@
+/**
+    Cpp17 RobotMovement, main.cpp
+    Purpose: Main of project
+
+    @author CuongNX
+    @version 1.0 11/1/2022
+*/
+
 #include <iostream>
 #include "controller.h"
 
