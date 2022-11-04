@@ -13,8 +13,10 @@ using namespace std;
 
 int main()
 {
-    Controller control = Controller("input3.txt");
+    Controller control;
+    control.LoadCommand("input3.txt");
     control.Start();
     control.ExportResult(new Output());
+
     return 0;
 }

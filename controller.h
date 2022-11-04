@@ -14,6 +14,7 @@
 #include "robot.h"
 #include "rcommand.h"
 #include "output.h"
+#include "utility.h"
 
 using namespace std;
 
@@ -27,11 +28,16 @@ public:
      * @brief Controller Constructor
      */
     Controller();
-    Controller(string commandFile);
     ~Controller();
 
     /**
-     * @brief start Start to control robot
+     * @brief LoadCommand Load all command into controller
+     * @param commandFile Command file name string
+     */
+    void LoadCommand(string commandFile);
+
+    /**
+     * @brief Start to control robot
      */
     void Start();
 
@@ -43,10 +49,15 @@ public:
 
 private:
     // Robot object pointer
-    Robot* robot;
+    Robot* robot = nullptr;
 
     //List of commads for robot execute
     vector<RCommand*> commands;
+
+    /**
+     * @brief clearCommand delete pointer and clear command list
+     */
+    void clearCommand();
 
     /**
      * @brief convertCmd Convert raw command with string to command by identify with enum

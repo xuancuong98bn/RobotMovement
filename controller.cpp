@@ -18,22 +18,21 @@ Controller::Controller()
 {
 }
 
-// Constructor
-Controller::Controller(string commandFile)
-{
-    vector<tuple<string,int, int>> raw_commands = Utility::GetCommand("..\\RobotMovement\\"+commandFile);
-    if (!raw_commands.empty()){
-        convertCmd(raw_commands);
-        robot = new Robot();
-    }
-}
-
 // Destructor
 Controller::~Controller()
 {
-    delete robot;
-    for(auto cmd : commands){
-        delete cmd;
+    if (robot != nullptr) delete robot;
+    clearCommand();
+}
+
+// Load all command into controller
+void Controller::LoadCommand(string commandFile)
+{
+    vector<tuple<string,int, int>> raw_commands = Utility::GetCommand("..\\RobotMovement\\"+commandFile);
+    if (!raw_commands.empty()){
+        if (robot == nullptr) robot = new Robot();
+        clearCommand();
+        convertCmd(raw_commands);
     }
 }
 
@@ -50,6 +49,15 @@ void Controller::ExportResult(Output* op)
 {
     if (robot != nullptr) op->Export(robot->RGrid());
     delete op;
+}
+
+// Delete pointer and clear command list
+void Controller::clearCommand()
+{
+    for(auto cmd : commands){
+        delete cmd;
+    }
+    if (!commands.empty()) commands.clear();
 }
 
 // Convert raw command with string to command by identify with enum

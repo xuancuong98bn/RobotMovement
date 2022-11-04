@@ -7,6 +7,7 @@
 */
 
 #include "robot.h"
+#include <iostream>
 
 // Constructor initial size for grid that area for moving
 Robot::Robot() : m_position {make_tuple(0,0)}
@@ -16,7 +17,10 @@ Robot::Robot() : m_position {make_tuple(0,0)}
 //Ask the robot to reset grid by a new size
 void Robot::InitGrid(int size)
 {
-    if (!m_grid.empty()) m_grid.clear();
+    if (!m_grid.empty()) {
+            Move(0,0);
+            m_grid.clear();
+    }
     for(int i = 0; i < size; ++i) {
         vector<bool> mem(size, false);
         m_grid.push_back(mem);
