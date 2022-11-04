@@ -9,54 +9,57 @@
 #include "controller.h"
 #include "utility.h"
 
+#include "cmd_dimension.h"
+#include "cmd_moveto.h"
+#include "cmd_lineto.h"
+
 // Constructor
 Controller::Controller()
 {
-    vector<tuple<string,int, int>> raw_commands = Utility::GetCommand("..\\RobotMovement\\"+sCommandFile);
-    if (!raw_commands.empty()){
-        convertCmd(raw_commands);
-        robot = new Robot(size);
-
-    }
 }
 
-// Start to control robot
-void Controller::start()
+// Constructor
+Controller::Controller(string commandFile)
 {
-    for(auto cmd : commands){
-        robot->Handle(cmd);
+    vector<tuple<string,int, int>> raw_commands = Utility::GetCommand("..\\RobotMovement\\"+commandFile);
+    if (!raw_commands.empty()){
+        convertCmd(raw_commands);
+        robot = new Robot();
     }
-    if (robot != nullptr) printGrid(robot->RGrid());
 }
 
 // Destructor
 Controller::~Controller()
 {
     delete robot;
+    for(auto cmd : commands){
+        delete cmd;
+    }
+}
+
+// Start to control robot
+void Controller::Start()
+{
+    for(auto cmd : commands){
+        cmd->SendTo(robot);
+    }
+}
+
+// Export the result grid that describe route that robot passed by a type of Output
+void Controller::ExportResult(Output* op)
+{
+    if (robot != nullptr) op->Export(robot->RGrid());
+    delete op;
 }
 
 // Convert raw command with string to command by identify with enum
 void Controller::convertCmd(vector<tuple<string, int, int>> raw_commands)
 {
     for(auto cmd : raw_commands){
-        string raw_cmd = get<0>(cmd);
-        tuple<string,int, int> rcmd;
-        if (raw_cmd.compare("DIMENSION") == 0) {
-            commands.push_back(make_tuple(Robot::DIMENSION, get<1>(cmd), get<2>(cmd)));
-            size = get<1>(cmd);
-        }
-        if (raw_cmd.compare("MOVE_TO") == 0) commands.push_back(make_tuple(Robot::MOVE_TO, get<1>(cmd), get<2>(cmd)));
-        if (raw_cmd.compare("LINE_TO") == 0) commands.push_back(make_tuple(Robot::LINE_TO, get<1>(cmd), get<2>(cmd)));
+        string cmd_str = get<0>(cmd);
+        if (cmd_str.compare("DIMENSION") == 0) commands.push_back(new CmdDimension(get<1>(cmd)));
+        if (cmd_str.compare("MOVE_TO") == 0) commands.push_back(new CmdMoveTo(get<1>(cmd), get<2>(cmd)));
+        if (cmd_str.compare("LINE_TO") == 0) commands.push_back(new CmdLineTo(get<1>(cmd), get<2>(cmd)));
     }
 }
 
-// Print grid that describe route that robot passed
-void Controller::printGrid(vector<vector<bool>> RGrid)
-{
-    for(int i = 0; i < size; i++){
-        for (int j = 0; j < size; j++) {
-            cout << (RGrid[i][j]? "+|" : " |");
-        }
-        cout << endl;
-    }
-}

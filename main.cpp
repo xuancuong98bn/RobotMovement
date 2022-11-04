@@ -13,6 +13,8 @@ using namespace std;
 
 int main()
 {
-    Controller control = Controller();
-    control.start();
+    Controller control = Controller("input3.txt");
+    control.Start();
+    control.ExportResult(new Output());
+    return 0;
 }

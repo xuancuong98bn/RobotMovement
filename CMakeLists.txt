@@ -7,7 +7,12 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_executable(RobotMovement main.cpp
         utility.h utility.cpp
+        rcommand.h
+        cmd_dimension.h cmd_dimension.cpp
+        cmd_moveto.h cmd_moveto.cpp
+        cmd_lineto.h cmd_lineto.cpp
         robot.h robot.cpp
+        output.h output.cpp
         controller.h controller.cpp
         input.txt input2.txt input3.txt
                             )

@@ -12,11 +12,10 @@
 #include <string>
 
 #include "robot.h"
+#include "rcommand.h"
+#include "output.h"
 
 using namespace std;
-
-// Store name of command file
-static const string sCommandFile = "input3.txt";
 
 /**
  * @brief The Controller class is responsible for getting commands and asking robot execute them
@@ -28,34 +27,32 @@ public:
      * @brief Controller Constructor
      */
     Controller();
+    Controller(string commandFile);
+    ~Controller();
 
     /**
      * @brief start Start to control robot
      */
-    void start();
+    void Start();
 
-    ~Controller();
+    /**
+     * @brief ExportResult Export the result grid that describe route that robot passed by a type of Output
+     * @param op The object identify type of output to express result
+     */
+    void ExportResult(Output* op);
+
 private:
-    // Store size of grid
-    int size;
-
     // Robot object pointer
     Robot* robot;
 
     //List of commads for robot execute
-    vector<tuple<Robot::RCmd,int, int>> commands;
+    vector<RCommand*> commands;
 
     /**
      * @brief convertCmd Convert raw command with string to command by identify with enum
      * @param raw_commands The commands had ready gotten from source file
      */
     void convertCmd(vector<tuple<string,int, int>>);
-
-    /**
-     * @brief printGrid Print grid that describe route that robot passed
-     * @param RGrid The matrix saved route that robot passed
-     */
-    void printGrid(vector<vector<bool>>);
 };
 
 #endif // CONTROLLER_H
